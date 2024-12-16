@@ -10,6 +10,7 @@ public:
         Node* temp = root->left;
         while (temp) {
             if (!isLeaf(temp)) ans.push_back(temp->data); // Push non-leaf nodes
+            else break;
             // Move to the next boundary node
             if (temp->left) temp = temp->left;
             else temp = temp->right;
@@ -22,6 +23,7 @@ public:
         stack<int> s;
         while (temp) {
             if (!isLeaf(temp)) s.push(temp->data); // Push non-leaf nodes
+             else break;
             // Move to the next boundary node
             if (temp->right) temp = temp->right;
             else temp = temp->left;
