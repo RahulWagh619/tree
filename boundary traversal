@@ -1,0 +1,64 @@
+class Solution {
+public:
+    // Helper to check if a node is a leaf
+    bool isLeaf(Node* root) {
+        return (root->left == NULL && root->right == NULL);
+    }
+
+    // Add left boundary (excluding leaf nodes)
+    void leftBoundary(Node* root, vector<int>& ans) {
+        Node* temp = root->left;
+        while (temp) {
+            if (!isLeaf(temp)) ans.push_back(temp->data); // Push non-leaf nodes
+            // Move to the next boundary node
+            if (temp->left) temp = temp->left;
+            else temp = temp->right;
+        }
+    }
+
+    // Add right boundary in reverse (excluding leaf nodes)
+    void rightBoundary(Node* root, vector<int>& ans) {
+        Node* temp = root->right;
+        stack<int> s;
+        while (temp) {
+            if (!isLeaf(temp)) s.push(temp->data); // Push non-leaf nodes
+            // Move to the next boundary node
+            if (temp->right) temp = temp->right;
+            else temp = temp->left;
+        }
+        // Add nodes in reverse order
+        while (!s.empty()) {
+            ans.push_back(s.top());
+            s.pop();
+        }
+    }
+
+    // Add all leaf nodes (left-to-right)
+    void leafNodes(Node* root, vector<int>& ans) {
+        if (isLeaf(root)) {
+            ans.push_back(root->data);
+            return;
+        }
+        if (root->left) leafNodes(root->left, ans);
+        if (root->right) leafNodes(root->right, ans);
+    }
+
+    vector<int> boundaryTraversal(Node* root) {
+        vector<int> ans;
+        if (root == NULL) return ans;
+
+        // Add root (only if it's not a leaf node)
+        if (!isLeaf(root)) ans.push_back(root->data);
+
+        // Add left boundary
+        leftBoundary(root, ans);
+
+        // Add all leaf nodes
+        leafNodes(root, ans);
+
+        // Add right boundary
+        rightBoundary(root, ans);
+
+        return ans;
+    }
+};
